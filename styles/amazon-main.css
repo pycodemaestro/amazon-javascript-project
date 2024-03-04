@@ -1,0 +1,136 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+@media (max-width: 2000px) {
+  .product-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media (max-width: 1600px) {
+  .product-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 1300px) {
+  .product-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 450px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.product-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 25px;
+  padding-top: 40px;
+
+  border-right: 1px solid rgb(231, 231, 231);
+  border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.product-image-container {
+  /* With this, if the screen size is reduced,
+ the photo will always be in the center of the card. */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 180px;
+  margin-bottom: 20px;
+}
+
+.product-image {
+  /* Images will overflow their container by default. To
+    prevent this, we set max-width and max-height to 100%
+    so they stay inside their container. */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.product-name {
+  height: 40px;
+  margin-bottom: 5px;
+}
+
+.product-rating-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.rating-image {
+  width: 100px;
+  margin-right: 6px;
+}
+
+.product-rating-count {
+  color: rgb(1, 124, 182);
+  cursor: pointer;
+  margin-top: 3px;
+}
+
+.product-price {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.product-quantity-container {
+  margin-bottom: 17px;
+}
+
+select {
+  border: 1px solid rgb(213, 217, 217);
+  border-radius: 10px;
+  padding: 5px;
+  background-color: rgb(240, 240, 240);
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.add-to-cart-button {
+  margin-top: 30px;
+  border: none;
+  padding: 10px 55px;
+  border-radius: 20px;
+  background-color: rgb(255, 216, 20);
+  cursor: pointer;
+}
+
+.add-to-cart-button:hover {
+  background-color: rgb(245, 207, 21);
+}
+
+.add-to-cart-button:active {
+  background-color: rgb(255, 216, 20);
+}
