@@ -1,15 +1,15 @@
-import { addToCart, cart} from "../data/cart.js";
+import { addToCart, cart, calcCartQuantity} from "../data/cart.js";
 import { products } from "../data/products.js";
 import {formatCurrency} from "./utils/money.js";
 
 
-let totalCartQuantity = 0;
+let totalCartQuantity = calcCartQuantity();
+;
 let timeOutIds = [];
 
 const productHTML = htmlGenerator();
 document.querySelector(".js-product-grid").innerHTML = productHTML;
 
-calcCartQuantity();
 updateCartQuantity();
 
 products.forEach((product) => {
@@ -88,13 +88,6 @@ function htmlGenerator() {
     )
     .join("");
   return productHTML;
-}
-
-function calcCartQuantity() {
-  totalCartQuantity = cart.reduce(
-    (total, elem) => total + Number(elem.quantity),
-    0
-  )
 }
 
 function updateCartQuantity() {

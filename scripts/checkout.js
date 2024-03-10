@@ -1,8 +1,29 @@
 import { formatCurrency } from "./utils/money.js";
-import { cart, removeItem } from "../data/cart.js";
+import { cart, removeItem, calcCartQuantity} from "../data/cart.js";
 import { products } from "../data/products.js";
 
 const html = generateHtml();
+document.querySelector(".js-order-summery").innerHTML = html;
+
+let numberOfItem = calcCartQuantity();
+updateCartQuantity(numberOfItem);
+
+document
+  .querySelector(".js-order-summery")
+  .addEventListener("click", (event) => {
+    const deleteLink = event.target.closest(".js-delete-link");
+
+    if (deleteLink) {
+      const productId = deleteLink.dataset.productId;
+      removeItem(productId);
+
+      document.querySelector(`.js-cart-item-container-${productId}`)
+      .remove();
+    }
+    
+    numberOfItem = Number(numberOfItem) - 1;
+    updateCartQuantity(numberOfItem);
+  });
 
 function generateHtml() {
   let html = "";
@@ -73,16 +94,8 @@ function generateDeliveryOptions(itemId) {
   `;
 }
 
-document.querySelector(".js-order-summery").innerHTML = html;
 
-document
-  .querySelector(".js-order-summery")
-  .addEventListener("click", (event) => {
-    const deleteLink = event.target.closest(".js-delete-link");
-    
-    if (deleteLink) {
-      const productId = deleteLink.dataset.productId;
-      removeItem(productId);
-      document.querySelector(`.js-cart-item-container-${productId}`).remove();
-    }
-  });
+function updateCartQuantity(numberOfItem){
+  document.querySelector(".js-return-to-home-link")
+  .innerHTML = numberOfItem;
+}

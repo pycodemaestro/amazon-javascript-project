@@ -22,3 +22,12 @@ export function removeItem(productId) {
   cart = cart.filter((item) => item.productId !== productId)
   saveCart();
 }
+
+export function calcCartQuantity() {
+  const totalCartQuantity = cart.reduce(
+    (total, elem) => total + Number(elem.quantity),
+    0
+  )
+
+  return totalCartQuantity;
+}
