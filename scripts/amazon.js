@@ -1,11 +1,16 @@
-import {addToCart} from "../data/cart.js";
+import { addToCart, cart} from "../data/cart.js";
 import { products } from "../data/products.js";
+import {formatCurrency} from "./utils/money.js";
+
 
 let totalCartQuantity = 0;
 let timeOutIds = [];
 
 const productHTML = htmlGenerator();
 document.querySelector(".js-product-grid").innerHTML = productHTML;
+
+calcCartQuantity();
+updateCartQuantity();
 
 products.forEach((product) => {
   const quantitySelector = document.querySelector(
@@ -25,17 +30,18 @@ document.querySelectorAll(".js-add-to-cart-button").forEach((button) => {
     const quantitySelector = document.querySelector(
       `.js-quantity-selector-${productId}`
     );
-    
+
     const selectorValue = quantitySelector.value;
     addToCart(productId, selectorValue);
 
     totalCartQuantity += Number(selectorValue);
-
     updateCartQuantity();
-    showMessageAdded(productId);
 
+    showMessageAdded(productId);
     clearTimeout(timeOutIds[productId]);
     timeOutIds[productId] = setTimeout(() => hideMessageAdded(productId), 2000);
+
+    console.log(cart);
   });
 });
 
@@ -59,7 +65,7 @@ function htmlGenerator() {
       <div class="product-rating-count">${product.rating.count}</div>
     </div>
 
-    <div class="product-price">$${(product.priceCents / 100).toFixed(2)}</div>
+    <div class="product-price">$${formatCurrency(product.priceCents)}</div>
 
     <div class="product-quantity-container">
       <select class="js-quantity-selector-${product.id}"></select>
@@ -82,6 +88,13 @@ function htmlGenerator() {
     )
     .join("");
   return productHTML;
+}
+
+function calcCartQuantity() {
+  totalCartQuantity = cart.reduce(
+    (total, elem) => total + Number(elem.quantity),
+    0
+  )
 }
 
 function updateCartQuantity() {
