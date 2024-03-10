@@ -2,103 +2,87 @@ import { formatCurrency } from "./utils/money.js";
 import { cart, removeItem } from "../data/cart.js";
 import { products } from "../data/products.js";
 
-htmlGenerator();
+const html = generateHtml();
 
-function htmlGenerator() {
+function generateHtml() {
   let html = "";
 
-  cart.map((product) => {
-    let matchingItem = products.find((item) => item.id === product.productId);
+  cart.forEach((product) => {
+    const matchingItem = products.find((item) => item.id === product.productId);
 
     html += `
-            <div class="cart-item-container">
-              <div class="delivery-date">
-                Delivery date: Tuesday, June 21
-              </div>
+      <div class="cart-item-container js-cart-item-container-${
+        matchingItem.id
+      }">
+        <div class="delivery-date">Delivery date: Tuesday, June 21</div>
 
-              <div class="cart-item-details-grid">
-                <img class="product-image"
-                  src="${matchingItem.image}">
+        <div class="cart-item-details-grid">
+          <img class="product-image" src="${matchingItem.image}">
 
-                <div class="cart-item-details">
-                  <div class="product-name">
-                    ${matchingItem.name}
-                  </div>
-                  <div class="product-price">
-                    $${formatCurrency(matchingItem.priceCents)}
-                  </div>
-                  <div class="product-quantity">
-                    <span>
-                      Quantity: <span class="quantity-label">${
-                        product.quantity
-                      }</span>
-                    </span>
-                    <span class="update-quantity-link link-primary">
-                      Update
-                    </span>
-                    <span data-product-id = ${matchingItem.id} class="delete-quantity-link link-primary js-delete-link">
-                      Delete
-                    </span>
-                  </div>
-                </div>
-
-                <div class="delivery-options">
-                  <div class="delivery-options-title">
-                    Choose a delivery option:
-                  </div>
-                  <div class="delivery-option">
-                    <input type="radio" checked
-                      class="delivery-option-input"
-                      name="delivery-option-${matchingItem.id}">
-                    <div>
-                      <div class="delivery-option-date">
-                        Tuesday, June 21
-                      </div>
-                      <div class="delivery-option-price">
-                        FREE Shipping
-                      </div>
-                    </div>
-                  </div>
-                  <div class="delivery-option">
-                    <input type="radio"
-                      class="delivery-option-input"
-                      name="delivery-option-${matchingItem.id}">
-                    <div>
-                      <div class="delivery-option-date">
-                        Wednesday, June 15
-                      </div>
-                      <div class="delivery-option-price">
-                        $4.99 - Shipping
-                      </div>
-                    </div>
-                  </div>
-                  <div class="delivery-option">
-                    <input type="radio"
-                      class="delivery-option-input"
-                      name="delivery-option-${matchingItem.id}">
-                    <div>
-                      <div class="delivery-option-date">
-                        Monday, June 13
-                      </div>
-                      <div class="delivery-option-price">
-                        $9.99 - Shipping
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="cart-item-details">
+            <div class="product-name">${matchingItem.name}</div>
+            <div class="product-price">$${formatCurrency(
+              matchingItem.priceCents
+            )}</div>
+            <div class="product-quantity">
+              <span>Quantity: <span class="quantity-label">${
+                product.quantity
+              }</span></span>
+              <span class="update-quantity-link link-primary">Update</span>
+              <span data-product-id="${
+                matchingItem.id
+              }" class="delete-quantity-link link-primary js-delete-link">Delete</span>
+            </div>
           </div>
+
+          <div class="delivery-options">
+            <div class="delivery-options-title">Choose a delivery option:</div>
+            ${generateDeliveryOptions(matchingItem.id)}
+          </div>
+        </div>
+      </div>
     `;
   });
 
-  document.querySelector(".js-order-summery").innerHTML = html;
+  return html;
 }
 
-document.querySelectorAll(".js-delete-link").forEach((link) => {
-  link.addEventListener("click", () => {
-    // const productId = link.dataset.productId;
-    const {productId} = link.dataset  
-    removeItem(productId);
-    console.log(cart);
-  })
-})
+function generateDeliveryOptions(itemId) {
+  return `
+    <div class="delivery-option">
+      <input type="radio" checked class="delivery-option-input" name="delivery-option-${itemId}">
+      <div>
+        <div class="delivery-option-date">Tuesday, June 21</div>
+        <div class="delivery-option-price">FREE Shipping</div>
+      </div>
+    </div>
+    <div class="delivery-option">
+      <input type="radio" class="delivery-option-input" name="delivery-option-${itemId}">
+      <div>
+        <div class="delivery-option-date">Wednesday, June 15</div>
+        <div class="delivery-option-price">$4.99 - Shipping</div>
+      </div>
+    </div>
+    <div class="delivery-option">
+      <input type="radio" class="delivery-option-input" name="delivery-option-${itemId}">
+      <div>
+        <div class="delivery-option-date">Monday, June 13</div>
+        <div class="delivery-option-price">$9.99 - Shipping</div>
+      </div>
+    </div>
+  `;
+}
+
+document.querySelector(".js-order-summery").innerHTML = html;
+
+document
+  .querySelector(".js-order-summery")
+  .addEventListener("click", (event) => {
+    const deleteLink = event.target.closest(".js-delete-link");
+    
+    if (deleteLink) {
+      const productId = deleteLink.dataset.productId;
+      removeItem(productId);
+      document.querySelector(`.js-cart-item-container-${productId}`).remove();
+    }
+  });
