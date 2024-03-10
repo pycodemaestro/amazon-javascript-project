@@ -17,3 +17,8 @@ export function addToCart(productId, selectorValue) {
   }
   saveCart();
 }
+
+export function removeItem(productId) {
+  cart = cart.filter((item) => item.productId !== productId)
+  saveCart();
+}
