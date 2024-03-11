@@ -10,9 +10,8 @@ import { products } from "../data/products.js";
 const html = generateHtml();
 document.querySelector(".js-order-summery").innerHTML = html;
 
-// Calculate and update the initial quantity of items in the cart
-let numberOfItem = calcCartQuantity();
-updateCartQuantity(numberOfItem);
+// Update the initial quantity of items in the cart
+updateCartQuantity();
 
 // Event listener for handling click events on the delete link
 document
@@ -24,11 +23,8 @@ document
     if (deleteLink) {
       const productId = deleteLink.dataset.productId;
       removeItem(productId);
-
       document.querySelector(`.js-cart-item-container-${productId}`).remove();
-
-      numberOfItem = Number(numberOfItem) - 1;
-      updateCartQuantity(numberOfItem);
+      updateCartQuantity();
     }
   });
 
@@ -65,7 +61,7 @@ document.querySelectorAll(".js-edit-container").forEach((container) => {
         updateItem(productId, inputValue);
 
         // Update the overall cart quantity and display
-        updateCartQuantity(calcCartQuantity());
+        updateCartQuantity();
 
         // Update the displayed quantity label for the specific product
         updateQuantityLabel(productId, inputValue);
@@ -167,8 +163,9 @@ function generateDeliveryOptions(itemId) {
   `;
 }
 
-// Function to update the displayed cart quantity
-function updateCartQuantity(numberOfItem) {
+// Calculate and update the initial quantity of items in the cart
+function updateCartQuantity() {
+  const numberOfItem = calcCartQuantity();
   document.querySelector(".js-return-to-home-link").innerHTML = numberOfItem;
 }
 
