@@ -187,3 +187,23 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+
+.quantity-input {
+  width: 30px;
+  font-size: 15px;
+  margin-left: 3px;
+}
+
+.edit-container {
+  display: none;
+}
+
+.show-edit-container {
+  display: initial;
+}
+
+.hide-update-link {
+  display: none;
+}
+
+

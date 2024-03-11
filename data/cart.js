@@ -23,11 +23,16 @@ export function removeItem(productId) {
   saveCart();
 }
 
+export function updateItem(productId, quantity) {
+  const product = cart.find((item) => item.productId === productId)
+  product.quantity = quantity;
+  saveCart();
+}
+
 export function calcCartQuantity() {
   const totalCartQuantity = cart.reduce(
     (total, elem) => total + Number(elem.quantity),
     0
   )
-
   return totalCartQuantity;
 }
