@@ -4,6 +4,7 @@ import {
   removeItem,
   calcCartQuantity,
   updateItem,
+  updateDeliveryOption,
 } from "../data/cart.js";
 import { products } from "../data/products.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
@@ -162,7 +163,7 @@ function generateDeliveryOptions(itemId, cartItem) {
 
     html += `   
     <div class="delivery-option">
-      <input data-product-id="${itemId}" type="radio" ${
+      <input data-delivery-option-id=${deliveryOption.id} data-product-id="${itemId}" type="radio" ${
       isChecked ? "checked" : ""
     } class="delivery-option-input js-delivery-option-input" value='${dateString}' name="delivery-option-${itemId}">
       <div>
@@ -180,11 +181,14 @@ document
   .querySelectorAll(".js-delivery-option-input")
   .forEach((deliveryOption) => {
     deliveryOption.addEventListener("click", () => {
-      const { productId } = deliveryOption.dataset;
+      const { productId, deliveryOptionId } = deliveryOption.dataset;
       const deliveryOptionValue = deliveryOption.value;
 
+      console.log(productId)
+      console.log(deliveryOptionId)
       updateDelivartDate(productId, deliveryOptionValue);
-    });
+      updateDeliveryOption(productId, deliveryOptionId);
+    })
   });
 
 // Calculate and update the initial quantity of items in the cart
@@ -199,16 +203,8 @@ function updateQuantityLabel(productId, numberOfItem) {
     numberOfItem;
 }
 
-function deliveryDateFunction(itemId) {
-  const value = document.querySelector(
-    `input[name=delivery-option-${itemId}]:checked`
-  ).value;
-  console.log(value);
-}
 
 function updateDelivartDate(productId, date) {
-  const deliveryDateElement = document.querySelector(
-    `.js-delivery-date-${productId}`
-  );
+  const deliveryDateElement = document.querySelector(`.js-delivery-date-${productId}`); 
   deliveryDateElement.innerText = "Delivery date: " + date;
 }
