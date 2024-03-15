@@ -93,11 +93,22 @@ function renderOrderSummary() {
         (item) => item.id === cartItem.productId
       );
 
+      const { deliveryOptionId } = cartItem;
+      const deliveryOption = deliveryOptions.find(
+        (option) => option.id === deliveryOptionId
+      );
+
+      const today = dayjs();
+      const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
+      const dateString = deliveryDate.format("dddd, MMMM D");
+
       html += `
         <div class="cart-item-container js-cart-item-container-${
           matchingItem.id
         }">
-          <div class="delivery-date js-delivery-date-${matchingItem.id}"></div>
+          <div class="delivery-date js-delivery-date-${
+            matchingItem.id
+          }">Delivery date: ${dateString}</div>
 
           <div class="cart-item-details-grid">
             <img class="product-image" src="${matchingItem.image}">
@@ -211,6 +222,5 @@ function renderOrderSummary() {
     deliveryDateElement.innerText = "Delivery date: " + date;
   }
 }
-
 
 renderOrderSummary();
