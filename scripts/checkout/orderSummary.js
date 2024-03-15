@@ -11,8 +11,9 @@ import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import {
   deliveryOptions,
   getDeliveryOption,
+  getDateString
 } from "../../data/deliveryOptions.js";
-import {renderPaymentSummary} from "./paymentSummary.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 export function renderOrderSummary() {
   const html = generateHtml();
