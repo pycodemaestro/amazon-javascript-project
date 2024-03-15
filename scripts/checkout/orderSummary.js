@@ -6,15 +6,15 @@ import {
   updateItem,
   updateDeliveryOption,
 } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { getProduct } from "../../data/products.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
+import {renderPaymentSummary} from "./paymentSummary.js";
 
 export function renderOrderSummary() {
-  const today = dayjs();
-  const deliveryDate = today.add(7, "days");
-  console.log(deliveryDate.format("dddd, MMMM D"));
-
   const html = generateHtml();
   document.querySelector(".js-order-summery").innerHTML = html;
 
@@ -29,10 +29,11 @@ export function renderOrderSummary() {
 
       // Check if the clicked element is a delete link
       if (deleteLink) {
-        const productId = deleteLink.dataset.productId;
+        const { productId } = deleteLink.dataset;
         removeItem(productId);
         document.querySelector(`.js-cart-item-container-${productId}`).remove();
         updateCartQuantity();
+        renderPaymentSummary();
       }
     });
 
@@ -73,6 +74,7 @@ export function renderOrderSummary() {
 
           // Update the displayed quantity label for the specific product
           updateQuantityLabel(productId, inputValue);
+          renderPaymentSummary();
         }
 
         // Hide the edit container and show the update link
@@ -89,14 +91,10 @@ export function renderOrderSummary() {
     let html = "";
 
     cart.forEach((cartItem) => {
-      const matchingItem = products.find(
-        (item) => item.id === cartItem.productId
-      );
+      const matchingItem = getProduct(cartItem.productId);
 
       const { deliveryOptionId } = cartItem;
-      const deliveryOption = deliveryOptions.find(
-        (option) => option.id === deliveryOptionId
-      );
+      const deliveryOption = getDeliveryOption(deliveryOptionId);
 
       const today = dayjs();
       const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
@@ -135,7 +133,7 @@ export function renderOrderSummary() {
       }">
                   <input type="number" class="quantity-input js-quantity-input-${
                     matchingItem.id
-                  }">
+                  }" value=${cartItem.quantity}>
                   <span class="save-quantity-link link-primary">Save</span>
                 </div>
                 
@@ -196,10 +194,10 @@ export function renderOrderSummary() {
     .forEach((deliveryOption) => {
       deliveryOption.addEventListener("click", () => {
         const { productId, deliveryOptionId } = deliveryOption.dataset;
-        const deliveryOptionValue = deliveryOption.value;
 
-        renderOrderSummary();
         updateDeliveryOption(productId, deliveryOptionId);
+        renderOrderSummary();
+        renderPaymentSummary();
       });
     });
 
