@@ -198,7 +198,7 @@ function renderOrderSummary() {
         const { productId, deliveryOptionId } = deliveryOption.dataset;
         const deliveryOptionValue = deliveryOption.value;
 
-        updateDelivartDate(productId, deliveryOptionValue);
+        renderOrderSummary();
         updateDeliveryOption(productId, deliveryOptionId);
       });
     });
@@ -213,13 +213,6 @@ function renderOrderSummary() {
   function updateQuantityLabel(productId, numberOfItem) {
     document.querySelector(`.js-quantity-label-${productId}`).innerHTML =
       numberOfItem;
-  }
-
-  function updateDelivartDate(productId, date) {
-    const deliveryDateElement = document.querySelector(
-      `.js-delivery-date-${productId}`
-    );
-    deliveryDateElement.innerText = "Delivery date: " + date;
   }
 }
 
