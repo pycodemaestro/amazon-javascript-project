@@ -1,4 +1,10 @@
-export let cart = JSON.parse(localStorage.getItem("cart")) || [];
+export let cart;
+
+loadFromStorage();
+
+export function loadFromStorage() {
+  cart = JSON.parse(localStorage.getItem("cart")) || [];
+}
 
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -37,7 +43,6 @@ export function calcCartQuantity() {
   );
   return totalCartQuantity;
 }
-
 
 export function updateDeliveryOption(productId, deliveryOptionId) {
   const product = cart.find((item) => item.productId === productId);
